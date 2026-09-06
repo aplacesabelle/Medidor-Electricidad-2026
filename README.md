@@ -10,33 +10,32 @@ Nace como respuesta a un problema real: en Chile, los usuarios generalmente solo
 
 ## Estado actual del proyecto
 
-Este proyecto comenzó como una propuesta (módulo 1) y actualmente cuenta con una primera versión funcional (módulo 2), con la pantalla principal de cálculo completamente operativa.
+En el módulo 1 solo tenía la idea planteada como propuesta. Para el módulo 2 avancé bastante más de lo pedido porque me interesó el proyecto y quise dejarlo funcionando de verdad, no solo en papel.
 
-### Funcionalidades implementadas
-- Ingreso de lectura anterior y lectura actual del medidor.
-- Cálculo automático del consumo en kWh (lectura actual − lectura anterior).
-- Cálculo del costo aproximado, desglosado en:
-    - Cargo fijo
-    - Energía consumida
-    - Impuestos
-- Interfaz visual con paleta de colores verde, pensada para transmitir la temática de energía/eficiencia.
+Lo que hice hasta ahora:
 
-## Tecnologías utilizadas
-- **Lenguaje:** Kotlin
-- **UI:** Jetpack Compose
-- **Entorno:** Android Studio
-- **Pruebas:** Emulador Android (Pixel 7, configurado dentro de Android Studio)
+- Instalé y configuré Android Studio, incluyendo el emulador (tuve varios problemas para que cargara bien, pero ya quedó funcionando con un Pixel 7).
+- Armé la pantalla principal con los campos para ingresar la lectura anterior y la lectura actual del medidor.
+- Programé el cálculo del consumo en kWh y del costo aproximado, mostrando el desglose de cargo fijo, energía consumida e impuestos.
+- Le di formato a la pantalla y elegí un color verde para la parte superior, pensando en la temática de energía.
+
+Todavía no he trabajado en guardar datos entre sesiones ni en dejar la tarifa configurable, eso queda pendiente para los próximos módulos.
+
+## Herramientas utilizadas
+
+Trabajé todo el proyecto en Android Studio, usando Kotlin y Jetpack Compose para la interfaz. Para las pruebas usé el emulador de Android configurado con un Pixel 7.
+
+Un desafío que tuve que resolver esta semana fue que mi computador (8 GB de RAM) no siempre daba abasto para correr Android Studio y el emulador al mismo tiempo, lo que hacía que el emulador se colgara o tardara mucho en cargar. Tuve que investigar cómo liberar memoria y reiniciar procesos que quedaban corriendo en segundo plano para poder seguir probando la app con normalidad.
+
+## Próxima semana
+
+Para la próxima semana quiero avanzar en guardar el historial de lecturas para que no se pierda al cerrar la app, y empezar a revisar cómo estructurar mejor el código siguiendo lo que vayamos viendo en el curso.
 
 ## Cómo ejecutar el proyecto
 1. Clonar este repositorio.
 2. Abrir el proyecto en Android Studio.
 3. Sincronizar Gradle.
 4. Ejecutar en un emulador o dispositivo físico con el botón ▶️ Run.
-
-## Próximos pasos
-- Guardar historial de lecturas entre sesiones.
-- Permitir configurar la tarifa por kWh.
-- Mejorar la validación de datos ingresados por el usuario.
 
 ## Referencias
 - Ministerio de Energía de Chile. (2023). *Estudio revela que el 73% del consumo energético de los hogares se destina a calefacción, climatización y agua caliente.* https://energia.gob.cl/noticias/nacional/estudio-revela-que-el-73-del-consumo-energetico-de-los-hogares-se-destina-calefaccionclimatizacion-y-agua-caliente
