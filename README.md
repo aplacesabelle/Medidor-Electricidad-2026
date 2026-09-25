@@ -8,63 +8,39 @@ La app permite al usuario ingresar la lectura anterior y la lectura actual de su
 
 Nace como respuesta a un problema real: en Chile, los usuarios generalmente solo conocen su consumo eléctrico al recibir la boleta mensual, lo que dificulta planificar el gasto y tomar decisiones informadas sobre el uso de energía en el hogar.
 
-## Estado actual del proyecto
+## Registro de cambios (Changelog)
 
-En el módulo 1 solo tenía la idea planteada como propuesta. Para el módulo 2 avancé bastante más de lo pedido porque me interesó el proyecto y quise dejarlo funcionando de verdad, no solo en papel. En el módulo 3 seguí avanzando, agregando las pantallas que había planteado en el wireframe de la semana anterior.
+### Módulo 1
+- Propuesta inicial del proyecto: descripción de la idea, sin código todavía.
 
-Lo que hice hasta ahora:
+### Módulo 2
+- Instalación y configuración de Android Studio y el emulador (Pixel 7).
+- Pantalla principal con lectura anterior, lectura actual, y cálculo de consumo y costo aproximado.
 
-- Instalé y configuré Android Studio, incluyendo el emulador (tuve varios problemas para que cargara bien, pero ya quedó funcionando con un Pixel 7).
-- Armé la pantalla principal con los campos para ingresar la lectura anterior y la lectura actual del medidor, y agregué un campo para el nombre del medidor (para diferenciar, por ejemplo, entre "Casa" y "Oficina").
-- Programé el cálculo del consumo en kWh y del costo aproximado, mostrando el desglose de cargo fijo, energía consumida e impuestos.
-- Le di formato a la pantalla y elegí un color verde para la parte superior, pensando en la temática de energía.
-- Agregué una pantalla de Ajustes, donde se puede configurar el cargo fijo y el precio por kWh, en vez de tenerlos fijos en el código.
-- Agregué una pantalla de Historial, que muestra los cálculos que se han hecho anteriormente (medidor, fecha, consumo y costo).
-- Armé una barra de navegación inferior con íconos para moverse entre las tres pantallas (Inicio, Historial, Ajustes).
-- Hice que los datos de tarifas y el historial se guarden en el teléfono usando `SharedPreferences`, para que no se pierdan al cerrar la app.
-- Esta semana agregué varias mejoras pensando en que la app se use de verdad, no solo una vez para probar:
-  - Al abrir la app, los campos de lectura y nombre del medidor ahora parten vacíos (antes tenían números de ejemplo fijos).
-  - Se puede elegir un medidor que ya se usó antes desde una lista, y la app rellena sola la "Lectura Anterior" con la última lectura que se guardó para ese medidor, para no tener que comparar siempre contra el mismo número.
-  - Si la lectura actual es menor que la anterior, la app avisa con un mensaje y no deja calcular.
-  - Si no se ingresa el nombre del medidor, tampoco deja calcular.
-  - Al guardar un cálculo, aparece un mensaje breve confirmando que se guardó.
-  - Los campos de lectura ahora solo aceptan números, filtrando letras y otros caracteres.
+### Módulo 3
+- Wireframes de las 3 pantallas (Inicio, Ajustes, Historial), dibujados a mano y digitalizados en Figma.
+- Implementación de las pantallas de Ajustes e Historial.
+- Navegación entre pantallas con barra inferior e íconos.
+- Persistencia de datos (tarifas e historial) usando `SharedPreferences`, para que no se pierdan al cerrar la app.
+- Campo para el nombre del medidor.
 
-## Herramientas utilizadas
+### Módulo 4
+- Los campos de lectura y nombre del medidor ahora parten vacíos al abrir la app, en vez de tener datos de ejemplo.
+- Se puede elegir un medidor ya usado desde una lista; la app autocompleta la "Lectura Anterior" con la última lectura guardada de ese medidor.
+- Validación: no se puede calcular sin ingresar el nombre del medidor.
+- Validación: la lectura actual no puede ser menor que la anterior, con un mensaje breve en pantalla si pasa.
+- Mensaje de confirmación al guardar un cálculo exitosamente.
+- Los campos de lectura ahora solo aceptan números (se filtran letras y otros caracteres).
+- Se agrega esta sección de changelog al README, para llevar un registro claro de los avances de cada módulo.
 
-# Medidor Eléctrico
+### Módulo 5 (actual)
+- Migré el guardado de datos de `SharedPreferences` a una base de datos real. Intenté primero con **Room**, pero tuve varios problemas de compatibilidad con el plugin `kapt` en mi versión de Android Studio y no logré dejarlo funcionando.
+- Terminé implementando **SQLite directo** con `SQLiteOpenHelper` (viene incluido en Android, sin necesitar plugins adicionales), creando las tablas `ajustes` e `historial` con SQL y usando `ContentValues` y `Cursor` para guardar y leer los datos.
+- Con esto, tanto los ajustes de tarifa como el historial de cálculos ahora se guardan en una base de datos SQL local en vez de `SharedPreferences`.
 
-Aplicación Android que calcula el consumo y costo aproximado de electricidad a partir de las lecturas del medidor del hogar.
-
-## Descripción del proyecto
-
-La app permite al usuario ingresar la lectura anterior y la lectura actual de su medidor eléctrico, calcular el consumo en kWh y obtener una estimación del costo en pesos chilenos (CLP), incluyendo el desglose de cargo fijo, energía consumida e impuestos.
-
-Nace como respuesta a un problema real: en Chile, los usuarios generalmente solo conocen su consumo eléctrico al recibir la boleta mensual, lo que dificulta planificar el gasto y tomar decisiones informadas sobre el uso de energía en el hogar.
-
-## Estado actual del proyecto
-
-En el módulo 1 solo tenía la idea planteada como propuesta. Para el módulo 2 avancé bastante más de lo pedido porque me interesó el proyecto y quise dejarlo funcionando de verdad, no solo en papel. En el módulo 3 seguí avanzando, agregando las pantallas que había planteado en el wireframe de la semana anterior, y esta semana le agregué mejoras pensando en un uso más real de la app.
-
-Lo que hice hasta ahora:
-
-- Instalé y configuré Android Studio, incluyendo el emulador (tuve varios problemas para que cargara bien, pero ya quedó funcionando con un Pixel 7).
-- Armé la pantalla principal con los campos para ingresar la lectura anterior y la lectura actual del medidor, y agregué un campo para el nombre del medidor (para diferenciar, por ejemplo, entre "Casa" y "Oficina").
-- Programé el cálculo del consumo en kWh y del costo aproximado, mostrando el desglose de cargo fijo, energía consumida e impuestos.
-- Le di formato a la pantalla y elegí un color verde para la parte superior, pensando en la temática de energía.
-- Agregué una pantalla de **Ajustes**, donde se puede configurar el cargo fijo y el precio por kWh, en vez de tenerlos fijos en el código.
-- Agregué una pantalla de **Historial**, que muestra los cálculos que se han hecho anteriormente (medidor, fecha, consumo y costo).
-- Armé una barra de navegación inferior con íconos para moverse entre las tres pantallas (Inicio, Historial, Ajustes).
-- Hice que los datos de tarifas y el historial se guarden en el teléfono usando `SharedPreferences`, para que no se pierdan al cerrar la app.
-- Esta semana agregué varias mejoras pensando en que la app se use de verdad, no solo una vez para probar:
-  - Al abrir la app, los campos de lectura y nombre del medidor ahora parten vacíos (antes tenían números de ejemplo fijos).
-  - Se puede elegir un medidor que ya se usó antes desde una lista, y la app rellena sola la "Lectura Anterior" con la última lectura que se guardó para ese medidor, para no tener que comparar siempre contra el mismo número.
-  - Si la lectura actual es menor que la anterior, la app avisa con un mensaje y no deja calcular.
-  - Si no se ingresa el nombre del medidor, tampoco deja calcular.
-  - Al guardar un cálculo, aparece un mensaje breve confirmando que se guardó.
-  - Los campos de lectura ahora solo aceptan números, filtrando letras y otros caracteres.
-
-Todavía me falta ordenar mejor el código a medida que crece, y más adelante quiero evaluar pasar el historial a una base de datos local (Room) si sigo agregando funciones.
+### Próximos pasos (planeado)
+- Evaluar si más adelante conviene volver a intentar Room (por ejemplo si cambio de versión de Android Studio), aunque por ahora SQLite directo cumple bien la función.
+- Seguir ordenando el código en archivos separados si el proyecto sigue creciendo.
 
 ## Herramientas utilizadas
 
@@ -74,11 +50,9 @@ Un desafío que tuve que resolver la primera semana fue que mi computador (en es
 
 En el módulo 3 el desafío fue distinto: al agregar los íconos de la barra de navegación tuve un error de compilación porque me faltaba agregar una dependencia (`material-icons-extended`) en el `build.gradle.kts`, y aprendí a diferenciar entre el archivo de configuración del proyecto completo y el del módulo `app`, que son fáciles de confundir.
 
-Esta semana el desafío principal fue pensar cómo simular el concepto de "cerrar el mes" sin tener que armar algo muy complejo: terminé usando el mismo historial que ya tenía guardado para buscar la última lectura de cada medidor, en vez de crear una tabla o lógica aparte solo para eso.
+En el módulo 4 el desafío principal fue pensar cómo simular el concepto de "cerrar el mes" sin tener que armar algo muy complejo: terminé usando el mismo historial que ya tenía guardado para buscar la última lectura de cada medidor, en vez de crear una tabla o lógica aparte solo para eso.
 
-## Próxima semana
-
-Para la próxima semana quiero seguir aplicando lo que veamos en el curso para ordenar mejor el código, y evaluar si conviene mover el guardado de datos a una base de datos local (Room) en vez de `SharedPreferences`, sobre todo porque el historial cada vez guarda más información por cada registro.
+En el módulo 5 el desafío fue justamente el guardado de datos: después de varios intentos fallidos configurando Room (problemas con el plugin `kapt` y la versión de Android Studio), opté por implementar SQLite directo con `SQLiteOpenHelper`, que viene incluido en Android y no requiere plugins adicionales. Aprendí a definir tablas con sentencias `CREATE TABLE`, y a usar `ContentValues` y `Cursor` para insertar y leer datos.
 
 ## Cómo ejecutar el proyecto
 1. Clonar este repositorio.
@@ -86,9 +60,6 @@ Para la próxima semana quiero seguir aplicando lo que veamos en el curso para o
 3. Sincronizar Gradle.
 4. Ejecutar en un emulador o dispositivo físico con el botón ▶️ Run.
 
-## Referencias
-- Ministerio de Energía de Chile. (2023). *Estudio revela que el 73% del consumo energético de los hogares se destina a calefacción, climatización y agua caliente.* https://energia.gob.cl/noticias/nacional/estudio-revela-que-el-73-del-consumo-energetico-de-los-hogares-se-destina-calefaccionclimatizacion-y-agua-caliente
-- Android Developers. (2019). *Enfoque de prioridad de Kotlin en Android.* Google. https://developer.android.com/kotlin/first?hl=es-419
 ## Referencias
 - Ministerio de Energía de Chile. (2023). *Estudio revela que el 73% del consumo energético de los hogares se destina a calefacción, climatización y agua caliente.* https://energia.gob.cl/noticias/nacional/estudio-revela-que-el-73-del-consumo-energetico-de-los-hogares-se-destina-calefaccionclimatizacion-y-agua-caliente
 - Android Developers. (2019). *Enfoque de prioridad de Kotlin en Android.* Google. https://developer.android.com/kotlin/first?hl=es-419
