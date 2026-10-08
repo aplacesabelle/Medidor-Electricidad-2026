@@ -55,13 +55,12 @@ enum class Pantalla {
     INICIO, HISTORIAL, AJUSTES
 }
 
-// ============================================================================
+//============================================================================
 // BASE DE DATOS (SQLite directo, con SQLiteOpenHelper)
-// Esta semana cambie el guardado de SharedPreferences a una base de datos
-// real, porque en el foro vimos que las apps deberian usar SQL para guardar
-// datos que van creciendo (como el historial). Uso SQLite directo en vez de
-// Room porque tuve varios problemas de compatibilidad con el plugin kapt
-// que necesita Room en mi version de Android Studio.
+// Los ajustes y el historial se guardan en una base de datos SQL local,
+// porque son datos que van creciendo. Uso SQLite directo en vez de Room
+// porque tuve problemas de compatibilidad con el plugin kapt en mi version
+// de Android Studio.
 // ============================================================================
 class DBHelper(context: Context) : SQLiteOpenHelper(context, NOMBRE_BD, null, VERSION_BD) {
 
