@@ -8,6 +8,82 @@ La app permite al usuario ingresar la lectura anterior y la lectura actual de su
 
 Nace como respuesta a un problema real: en Chile, los usuarios generalmente solo conocen su consumo eléctrico al recibir la boleta mensual, lo que dificulta planificar el gasto y tomar decisiones informadas sobre el uso de energía en el hogar.
 
+## Exposición del problema
+
+En Chile, la mayoría de las personas se entera de cuánto consumió de electricidad recién cuando llega la boleta del mes. Para ese momento ya no hay mucho que hacer: el gasto está hecho y es difícil saber en qué se fue. Además, la boleta junta varios cobros (energía, cargo fijo, impuestos) y no siempre es fácil entender de dónde sale el total.
+
+Con esta app quise que el usuario pueda revisar su medidor cuando quiera, ver cuántos kWh ha consumido y cuánto costaría aproximadamente, sin esperar a fin de mes.
+
+## Plataforma
+
+Desarrollé la aplicación para **Android**, usando Android Studio con **Kotlin** y **Jetpack Compose (Material 3)** para la interfaz. Los datos se guardan en el teléfono con **SQLite**, a través de `SQLiteOpenHelper`. Para probarla usé el emulador de un Pixel 7.
+
+## Interfaz de usuario e interfaz de administrador
+
+La app tiene tres pantallas, a las que se llega desde una barra de navegación inferior.
+
+**Interfaz de usuario**
+- **Inicio:** acá ingreso el nombre del medidor y las lecturas, y la app calcula el consumo y el costo. También puedo elegir un medidor que ya guardé antes.
+- **Historial:** muestra los cálculos guardados en tarjetas, del más nuevo al más antiguo.
+
+**Interfaz de administrador**
+- **Ajustes:** acá configuro el cargo fijo y el precio del kWh. En esta versión no hay un administrador separado, así que esta pantalla cumple ese papel: quien usa la app puede actualizar las tarifas cuando cambian en la boleta.
+
+## Funcionalidad
+
+**Cálculo del consumo y del costo.** El consumo es la lectura actual menos la anterior. A eso le aplico el precio del kWh para obtener la energía, y después sumo el cargo fijo y los impuestos (8,1 % sobre la energía más el cargo fijo) para llegar al total. Por ejemplo, de 8590 a 8650 son 60 kWh: la energía cuesta $9.600, los impuestos $939 y el total es **$12.539**.
+
+**Medidores guardados.** Puedo elegir un medidor que ya usé y la app completa sola la lectura anterior con la última que guardé.
+
+**Validaciones.** Para evitar errores, el nombre del medidor es obligatorio, la lectura actual no puede ser menor que la anterior y los campos de lectura solo aceptan números. Cuando el cálculo se guarda bien, aparece un mensaje de confirmación.
+
+**Historial.** Cada cálculo queda guardado con el nombre del medidor, la fecha, el consumo, el costo total y la lectura actual.
+
+**Ajustes de tarifa.** El cargo fijo y el precio del kWh se pueden cambiar, y los nuevos valores se usan desde el siguiente cálculo.
+
+**Base de datos.** Los ajustes y el historial se guardan en dos tablas SQLite (`ajustes` e `historial`), por lo que no se pierden al cerrar la app.
+
+## Diseño (wireframes)
+
+Antes de programar, dibujé a mano un esquema de cada pantalla y después lo pasé a Figma. Esos wireframes fueron la base de la app. A continuación muestro cada wireframe junto a cómo quedó la pantalla en la app terminada, probada en el emulador.
+
+### Inicio
+Campos de lectura anterior, lectura actual y nombre del medidor, botón Calcular, el resultado (consumo y costo aproximado) y el detalle de la boleta (cargo fijo, energía consumida e impuestos).
+
+<table>
+<tr><th>Wireframe</th><th>App terminada</th></tr>
+<tr>
+<td><img src="Android%20Medium%20-%201.png" alt="Wireframe de Inicio" width="260"></td>
+<td><img src="app-inicio.jpeg" alt="Pantalla Inicio de la app" width="260"></td>
+</tr>
+</table>
+
+### Historial
+Lista de tarjetas, una por cada cálculo guardado, con el nombre del medidor, la fecha, el consumo y el costo.
+
+<table>
+<tr><th>Wireframe</th><th>App terminada</th></tr>
+<tr>
+<td><img src="Android%20Medium%20-%203.png" alt="Wireframe de Historial" width="260"></td>
+<td><img src="app-historial.jpeg" alt="Pantalla Historial de la app" width="260"></td>
+</tr>
+</table>
+
+### Ajustes
+Dos campos, para el cargo fijo y el precio del kWh.
+
+<table>
+<tr><th>Wireframe</th><th>App terminada</th></tr>
+<tr>
+<td><img src="Android%20Medium%20-%202.png" alt="Wireframe de Ajustes" width="260"></td>
+<td><img src="app-ajustes.jpeg" alt="Pantalla Ajustes de la app" width="260"></td>
+</tr>
+</table>
+
+Las tres pantallas comparten la barra de navegación inferior (Inicio, Historial y Ajustes).
+
+**Cambios respecto a los wireframes:** al programar la app agregué algunas cosas que no estaban en el dibujo. En Inicio, un listado para elegir un medidor ya guardado (que completa solo la lectura anterior), el texto de ayuda y los mensajes de validación. En Ajustes, un botón Guardar. También cambié el diseño de los resultados a tarjetas y agregué colores verdes a la barra superior. La estructura general y la barra de navegación se mantuvieron.
+
 ## Registro de cambios (Changelog)
 
 ### Módulo 1
@@ -39,8 +115,14 @@ Nace como respuesta a un problema real: en Chile, los usuarios generalmente solo
 - Con esto, tanto los ajustes de tarifa como el historial de cálculos ahora se guardan en una base de datos SQL local en vez de `SharedPreferences`.
 
 ### Próximos pasos (planeado)
-- Evaluar si más adelante conviene volver a intentar Room (por ejemplo si cambio de versión de Android Studio), aunque por ahora SQLite directo cumple bien la función.
-- Seguir ordenando el código en archivos separados si el proyecto sigue creciendo.
+Para una versión futura pienso incorporar:
+- Subir la boleta en PDF de la compañía eléctrica para sacar los datos iniciales (sector tarifario, ubicación, número de medidor).
+- Cargar las tarifas de las distintas distribuidoras del país, que tienen un formato estándar, para calcular transporte, energía, potencia y cargos por servicios públicos.
+- Escanear el consumo del medidor con la cámara.
+- Georreferenciar el medidor.
+- Mostrar gráficos de consumo.
+- Una pasarela de pago para pagar la boleta, que solo sería posible si hay un acuerdo comercial con la compañía.
+- Evaluar volver a intentar Room si cambio de versión de Android Studio.
 
 ## Herramientas utilizadas
 
