@@ -84,6 +84,16 @@ Las tres pantallas comparten la barra de navegación inferior (Inicio, Historial
 
 **Cambios respecto a los wireframes:** al programar la app agregué algunas cosas que no estaban en el dibujo. En Inicio, un listado para elegir un medidor ya guardado (que completa solo la lectura anterior), el texto de ayuda y los mensajes de validación. En Ajustes, un botón Guardar. También cambié el diseño de los resultados a tarjetas y agregué colores verdes a la barra superior. La estructura general y la barra de navegación se mantuvieron.
 
+## Pruebas realizadas
+
+Probé la aplicación en el emulador (Pixel 7) durante todo el desarrollo. Las pruebas principales fueron:
+- Calcular el consumo y el costo con distintas lecturas, y comprobar el resultado a mano (por ejemplo, de 8590 a 8650 da 60 kWh y $12.539).
+- Intentar calcular sin nombre de medidor, y con una lectura actual menor que la anterior, para ver que aparecieran los mensajes de error.
+- Escribir letras en los campos de lectura, para comprobar que solo aceptan números.
+- Guardar varios cálculos y revisar que aparecieran en el Historial, del más nuevo al más antiguo.
+- Cambiar el cargo fijo y el precio del kWh en Ajustes, y ver que el siguiente cálculo usara los valores nuevos.
+- Cerrar y volver a abrir la app, para comprobar que los datos seguían guardados en SQLite.
+
 ## Registro de cambios (Changelog)
 
 ### Módulo 1
@@ -109,10 +119,22 @@ Las tres pantallas comparten la barra de navegación inferior (Inicio, Historial
 - Los campos de lectura ahora solo aceptan números (se filtran letras y otros caracteres).
 - Se agrega esta sección de changelog al README, para llevar un registro claro de los avances de cada módulo.
 
-### Módulo 5 (actual)
+### Módulo 5
 - Migré el guardado de datos de `SharedPreferences` a una base de datos real. Intenté primero con **Room**, pero tuve varios problemas de compatibilidad con el plugin `kapt` en mi versión de Android Studio y no logré dejarlo funcionando.
 - Terminé implementando **SQLite directo** con `SQLiteOpenHelper` (viene incluido en Android, sin necesitar plugins adicionales), creando las tablas `ajustes` e `historial` con SQL y usando `ContentValues` y `Cursor` para guardar y leer los datos.
 - Con esto, tanto los ajustes de tarifa como el historial de cálculos ahora se guardan en una base de datos SQL local en vez de `SharedPreferences`.
+
+### Módulo 6
+- Revisé cómo usar SMS y llamadas en Android. Decidí no implementarlo en esta versión, porque la app no necesita enviar mensajes y habría que pedir permisos al usuario sin una razón clara. Queda como idea para avisar cuando el consumo sea alto.
+
+### Módulo 7
+- Revisé los servicios de ubicación. No los implementé todavía, porque primero quería terminar el guardado de datos. Quedó como idea para una versión futura: usar la ubicación como atajo para elegir el medidor (Casa u Oficina).
+
+### Módulo 8 (actual)
+- Revisé los servicios en segundo plano de Android y los comparé según el tipo de tarea. Para esta app elegí **WorkManager**, para un recordatorio mensual que pida ingresar la lectura del medidor, porque la tarea no la inicia el usuario y puede aplazarse. Hice un diagrama de actividades con ese flujo para el foro.
+- No lo implementé en esta versión, porque la app hace todo mientras el usuario la usa. Queda como idea para una versión futura.
+- Revisé el proceso para publicar una aplicación en Google Play (cuenta de desarrollador, ficha de la app, política de privacidad y revisión). No la publiqué. A la app le faltaría el ícono y la política de privacidad.
+- Preparé la presentación final del proyecto y dejé el README y la Wiki en el repositorio, con el informe completo de la aplicación.
 
 ### Próximos pasos (planeado)
 Para una versión futura pienso incorporar:
@@ -121,6 +143,8 @@ Para una versión futura pienso incorporar:
 - Escanear el consumo del medidor con la cámara.
 - Georreferenciar el medidor.
 - Mostrar gráficos de consumo.
+- Un servicio en segundo plano que recuerde ingresar la lectura del medidor cada mes.
+- Publicar la aplicación en Google Play.
 - Una pasarela de pago para pagar la boleta, que solo sería posible si hay un acuerdo comercial con la compañía.
 - Evaluar volver a intentar Room si cambio de versión de Android Studio.
 
